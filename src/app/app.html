@@ -1,0 +1,318 @@
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
+<!-- * * * * * * * to get started with your project! * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+<style>
+    :host {
+        --bright-blue: oklch(51.01% 0.274 263.83);
+        --electric-violet: oklch(53.18% 0.28 296.97);
+        --french-violet: oklch(47.66% 0.246 305.88);
+        --vivid-pink: oklch(69.02% 0.277 332.77);
+        --hot-red: oklch(61.42% 0.238 15.34);
+        --orange-red: oklch(63.32% 0.24 31.68);
+
+        --gray-900: oklch(19.37% 0.006 300.98);
+        --gray-700: oklch(36.98% 0.014 302.71);
+        --gray-400: oklch(70.9% 0.015 304.04);
+
+        --red-to-pink-to-purple-vertical-gradient: linear-gradient(180deg,
+                var(--orange-red) 0%,
+                var(--vivid-pink) 50%,
+                var(--electric-violet) 100%);
+
+        --red-to-pink-to-purple-horizontal-gradient: linear-gradient(90deg,
+                var(--orange-red) 0%,
+                var(--vivid-pink) 50%,
+                var(--electric-violet) 100%);
+
+        --pill-accent: var(--bright-blue);
+
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+            "Segoe UI Symbol";
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        width: 100%;
+
+        input, select{
+            min-height: 30px;
+        }
+    }
+
+    .form-group, .slip-pdf, .pdf-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        p {
+            color: orange;
+        }
+    }
+
+    .slip-pdf {
+        gap: 0.5rem;
+    }
+
+    .submit-btn {
+        min-height: 40px;
+    }
+
+    .company-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: orange;
+    }
+    .heading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: underline;
+    }
+    .net-pay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    .note {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+</style>
+
+<main class="main">
+    <div class="content">
+        <button type="reset" class="reset-btn" (click)="resetForm()">Reset</button>
+        @if(showForm) {
+        <div class="form-container">
+            <form [formGroup]="salaryForm" (ngSubmit)="onSubmit()" class="form">
+                <div class="form-group">
+                    <label for="employeeName">Employee Name</label>
+                    <input type="text" id="employeeName" formControlName="employeeName" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="employeeId">Employee ID</label>
+                    <input type="text" id="employeeId" formControlName="employeeId" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="designation">Designation</label>
+                    <input type="text" id="designation" formControlName="designation" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="pfNo">PF No.</label>
+                    <input type="text" id="pfNo" formControlName="pfNo" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="uanNo">UAN No.</label>
+                    <input type="text" id="uanNo" formControlName="uanNo" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="accountNo">Account Number</label>
+                    <input type="text" id="accountNo" formControlName="accountNo" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="numberOfDays">No. of Days</label>
+                    <input type="text" id="numberOfDays" formControlName="numberOfDays" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="daysPresent">Days Present</label>
+                    <input type="text" id="daysPresent" formControlName="daysPresent" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="aadharNo">Aadhar No.</label>
+                    <input type="text" id="aadharNo" formControlName="aadharNo" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="panNo">PAN No.</label>
+                    <input type="text" id="panNo" formControlName="panNo" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="month">Month</label>
+                    <select id="month" formControlName="month" class="form-input">
+                        <option value="">Select Month</option>
+                        @for (month of months; track month) {
+                            <option [value]="month">{{ month }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <select id="year" formControlName="year" class="form-input">
+                        <option value="">Select Year</option>
+                        @for (year of years; track year) {
+                            <option [value]="year">{{ year }}</option>
+                        }
+                    </select>
+                </div>
+
+                <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid var(--gray-400); margin: 1rem 0;">
+
+                <div class="form-group">
+                    <label for="basicSalary">Basic</label>
+                    <input type="text" id="basicSalary" formControlName="basicSalary" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="pfAmount">Pf</label>
+                    <input type="text" id="pfAmount" formControlName="pfAmount" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="hra">HRA</label>
+                    <input type="text" id="hra" formControlName="hra" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="tax">Tax</label>
+                    <input type="text" id="tax" formControlName="tax" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="allowances">Allowances</label>
+                    <input type="text" id="allowances" formControlName="allowances" class="form-input">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="others">Others</label>
+                    <input type="text" id="others" formControlName="others" class="form-input">
+                </div>
+
+                <button type="submit" class="submit-btn">Generate Slip</button>
+            </form>
+        </div>
+        } @else {
+        <div class="company-name">Eurys Infosystem Pvt. Ltd.</div>
+        <div class="company-address">CP Place...</div>
+        
+        <h2 class="heading">Pay Slip for the month of {{ salaryForm.get('month')?.value }}/{{ salaryForm.get('year')?.value }}</h2>
+        <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid orange; margin: 1rem 0;">
+        
+        <div class="slip-pdf">
+            <div class="pdf-group">
+                <div>Emp ID</div>
+                <div>{{ salaryForm.get('employeeId')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>No Of Days</div>
+                <div>{{ salaryForm.get('numberOfDays')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>Emp Name</div>
+                <div>{{ salaryForm.get('employeeName')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>Days Present</div>
+                <div>{{ salaryForm.get('daysPresent')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>Designation</div>
+                <div>{{ salaryForm.get('designation')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>PF No</div>
+                <div>{{ salaryForm.get('pfNo')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>Account Number</div>
+                <div>{{ salaryForm.get('accountNo')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>UAN No</div>
+                <div>{{ salaryForm.get('uanNo')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>Aadhar No</div>
+                <div>{{ salaryForm.get('aadharNo')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>PAN No</div>
+                <div>{{ salaryForm.get('panNo')?.value }}</div>
+            </div>
+            <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid orange; margin: 1rem 0;">
+            <div class="pdf-group">
+                <p><b>EARNINGS</b></p>
+                <p><b>AMOUNT</b></p>
+            </div>
+            <div class="pdf-group">
+                <p><b>DEDUCTIONS</b></p>
+                <p><b>AMOUNT</b></p>
+            </div>
+            <div class="pdf-group">
+                <div>Basic</div>
+                <div>{{ salaryForm.get('basicSalary')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>PF</div>
+                <div>{{ salaryForm.get('pfAmount')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>HRA</div>
+                <div>{{ salaryForm.get('hra')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>TAX</div>
+                <div>{{ salaryForm.get('tax')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>Allowance</div>
+                <div>{{ salaryForm.get('allowances')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div>Others</div>
+                <div>{{ salaryForm.get('others')?.value }}</div>
+            </div>
+            <div class="pdf-group">
+                <div><b>Total</b></div>
+                <div>{{ calculateEarningsTotal() }}</div>
+            </div>
+            <div class="pdf-group">
+                <div><b>Total</b></div>
+                <div>{{ calculateDeductionsTotal() }}</div>
+            </div>
+            <div class="pdf-group">
+                <div><b>Net Pay</b></div>
+                <div>{{ calculateNetPayTotal() }}</div>
+            </div>       
+        </div>
+        <div class="net-pay"><b>Total Net Payable: {{ calculateNetPayTotal() }} ({{ amountToWords(calculateNetPayTotal()) }})</b></div>
+        <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid orange; margin: 1rem 0;">
+        <div class="note">This is a system generated salary slip. Hence signature is not required.</div>
+    }
+    </div>
+</main>
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+
+<router-outlet />
