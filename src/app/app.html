@@ -60,6 +60,10 @@
         }
     }
 
+    .pdf-container {
+        padding: 10% 15%;
+    }
+
     .slip-pdf {
         gap: 0.5rem;
     }
@@ -77,7 +81,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        text-decoration: underline;
     }
     .net-pay {
         display: flex;
@@ -96,7 +99,6 @@
 <main class="main">
     <div class="content">
         <button type="reset" class="reset-btn" (click)="resetForm()">Reset</button>
-        @if(showForm) {
         <div class="form-container">
             <form [formGroup]="salaryForm" (ngSubmit)="onSubmit()" class="form">
                 <div class="form-group">
@@ -205,11 +207,11 @@
                 <button type="submit" class="submit-btn">Generate Slip</button>
             </form>
         </div>
-        } @else {
+        <div class="pdf-container" #contentToConvert id="contentToConvert">
         <div class="company-name">Eurys Infosystem Pvt. Ltd.</div>
         <div class="company-address">CP Place...</div>
         
-        <h2 class="heading">Pay Slip for the month of {{ salaryForm.get('month')?.value }}/{{ salaryForm.get('year')?.value }}</h2>
+        <h2 class="heading">Pay Slip for the month of {{ salaryForm.get('month')?.value }}-{{ salaryForm.get('year')?.value }}</h2>
         <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid orange; margin: 1rem 0;">
         
         <div class="slip-pdf">
@@ -302,7 +304,7 @@
         <div class="net-pay"><b>Total Net Payable: {{ calculateNetPayTotal() }} ({{ amountToWords(calculateNetPayTotal()) }})</b></div>
         <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid orange; margin: 1rem 0;">
         <div class="note">This is a system generated salary slip. Hence signature is not required.</div>
-    }
+        </div>
     </div>
 </main>
 

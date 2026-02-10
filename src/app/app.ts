@@ -1,7 +1,26 @@
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAnalytics } from 'firebase/analytics';
 
+const firebaseConfig = {
+    apiKey: "AIzaSyDrkphJeVH4nJoA03WJMgTxPpVJVwy365Y",
+    authDomain: "salary-slip-app-ecdb4.firebaseapp.com",
+    projectId: "salary-slip-app-ecdb4",
+    
+    storageBucket: "salary-slip-app-ecdb4.firebasestorage.app",
+    messagingSenderId: "133204434143",
+    appId: "1:133204434143:web:08b3870e96450106249d6a",
+    measurementId: "G-98S8EWDR41"
+};
+
+const app = initializeApp(firebaseConfig);
+export const analytics = getAnalytics(app);
+export const db = getFirestore(app);
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, FormsModule, ReactiveFormsModule],
@@ -9,6 +28,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.scss'
 })
 export class App {
+    @ViewChild('contentToConvert', { static: false }) public contentToConvert: ElementRef | undefined;
     protected readonly title = signal('salary-slip-app');
     salaryForm: FormGroup;
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -40,9 +60,17 @@ export class App {
 
     onSubmit() {
         this.showForm = false;
-        if (this.salaryForm.valid) {
             console.log(this.salaryForm.value);
-        }
+            const data = document.getElementById('contentToConvert'); // Use the ID or ElementRef
+
+            html2canvas(data as HTMLElement).then(canvas => {
+                const imgWidth = 208;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const contentDataURL = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
+                pdf.save('screen-capture.pdf');
+            });
     }
 
     resetForm() {
