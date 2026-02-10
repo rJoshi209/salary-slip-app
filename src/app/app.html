@@ -46,26 +46,34 @@
         gap: 1rem;
         width: 100%;
 
-        input, select{
+        input,
+        select {
             min-height: 30px;
         }
     }
 
-    .form-group, .slip-pdf, .pdf-group {
+    .form-group,
+    .slip-pdf,
+    .pdf-group {
         display: grid;
         grid-template-columns: 1fr 1fr;
+    }
 
-        p {
-            color: orange;
+    .pdf-label {
+        margin-left: 1rem;
+
+        div:nth-child(2) {
+            margin-left: .5rem;
         }
     }
 
     .pdf-container {
-        padding: 10% 15%;
+        padding: 10% 5cqh;
     }
 
     .slip-pdf {
         gap: 0.5rem;
+        padding: 1rem 1rem 0 1rem;
     }
 
     .submit-btn {
@@ -75,24 +83,66 @@
     .company-name {
         font-size: 1.5rem;
         font-weight: bold;
-        color: orange;
     }
+
     .heading {
         display: flex;
         align-items: center;
         justify-content: center;
     }
+
     .net-pay {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-top: 1rem;
+        margin: 1rem 0;
+
+        .words {
+            font-style: italic;
+        }
     }
+
     .note {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-top: 2rem;
+        color: grey;
+    }
+
+    .company-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .money-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-bottom: 1px solid grey;
+        border-top: 1px solid grey;
         margin-top: 1rem;
+        padding-left: 1rem;
+    }
+
+    .amount-container {
+        border-right: 1px solid grey;
+        padding-bottom: 1rem;
+
+        .pdf-group {
+            padding: 0.25rem 0;
+        }
+    }
+
+    .deduction-container {
+        padding-left: 1rem;
+        padding-bottom: 1rem;
+        .pdf-group {
+            padding: 0.25rem 0;
+        }
+    }
+    .employee-details {
+        border: 1px solid grey;
     }
 </style>
 
@@ -156,7 +206,7 @@
                     <select id="month" formControlName="month" class="form-input">
                         <option value="">Select Month</option>
                         @for (month of months; track month) {
-                            <option [value]="month">{{ month }}</option>
+                        <option [value]="month">{{ month }}</option>
                         }
                     </select>
                 </div>
@@ -166,12 +216,10 @@
                     <select id="year" formControlName="year" class="form-input">
                         <option value="">Select Year</option>
                         @for (year of years; track year) {
-                            <option [value]="year">{{ year }}</option>
+                        <option [value]="year">{{ year }}</option>
                         }
                     </select>
                 </div>
-
-                <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid var(--gray-400); margin: 1rem 0;">
 
                 <div class="form-group">
                     <label for="basicSalary">Basic</label>
@@ -208,102 +256,110 @@
             </form>
         </div>
         <div class="pdf-container" #contentToConvert id="contentToConvert">
-        <div class="company-name">Eurys Infosystem Pvt. Ltd.</div>
-        <div class="company-address">CP Place...</div>
-        
-        <h2 class="heading">Pay Slip for the month of {{ salaryForm.get('month')?.value }}-{{ salaryForm.get('year')?.value }}</h2>
-        <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid orange; margin: 1rem 0;">
-        
-        <div class="slip-pdf">
-            <div class="pdf-group">
-                <div>Emp ID</div>
-                <div>{{ salaryForm.get('employeeId')?.value }}</div>
+            <div class="company-container">
+                <div class="company-info">
+                    <div class="company-name">Eurys Infosystems Pvt. Ltd.</div>
+                    <div class="company-address">A 31, Block A, Sector 4</div>
+                    <div class="company-address">Noida, Uttar Pradesh, 201301</div>
+                </div>
+                <img src="assests/logo.png" alt="Company Logo" width="150">
             </div>
-            <div class="pdf-group">
-                <div>No Of Days</div>
-                <div>{{ salaryForm.get('numberOfDays')?.value }}</div>
+
+            <h2 class="heading">Pay Slip for the month of {{ salaryForm.get('month')?.value }} {{
+                salaryForm.get('year')?.value }}</h2>
+            <div class="employee-details">
+            <div class="slip-pdf">
+                <div class="pdf-group">
+                    <div>Employee ID</div>
+                    <div>{{ salaryForm.get('employeeId')?.value }}</div>
+                </div>
+                <div class="pdf-group pdf-label">
+                    <div>Days In Month</div>
+                    <div>{{ salaryForm.get('numberOfDays')?.value }}</div>
+                </div>
+                <div class="pdf-group">
+                    <div>Employee Name</div>
+                    <div>{{ salaryForm.get('employeeName')?.value }}</div>
+                </div>
+                <div class="pdf-group pdf-label">
+                    <div>Effective Work Days</div>
+                    <div>{{ salaryForm.get('daysPresent')?.value }}</div>
+                </div>
+                <div class="pdf-group">
+                    <div>Designation</div>
+                    <div>{{ salaryForm.get('designation')?.value }}</div>
+                </div>
+                <div class="pdf-group pdf-label">
+                    <div>PF No</div>
+                    <div>{{ salaryForm.get('pfNo')?.value }}</div>
+                </div>
+                <div class="pdf-group">
+                    <div>Account Number</div>
+                    <div>{{ salaryForm.get('accountNo')?.value }}</div>
+                </div>
+                <div class="pdf-group pdf-label">
+                    <div>UAN No</div>
+                    <div>{{ salaryForm.get('uanNo')?.value }}</div>
+                </div>
+                <div class="pdf-group">
+                    <div>Aadhar No</div>
+                    <div>{{ salaryForm.get('aadharNo')?.value }}</div>
+                </div>
+                <div class="pdf-group pdf-label">
+                    <div>PAN No</div>
+                    <div>{{ salaryForm.get('panNo')?.value }}</div>
+                </div>
             </div>
-            <div class="pdf-group">
-                <div>Emp Name</div>
-                <div>{{ salaryForm.get('employeeName')?.value }}</div>
+            <div class="money-container">
+                <div class="amount-container">
+                    <div class="pdf-group">
+                        <p><b>EARNINGS</b></p>
+                        <p><b>AMOUNT</b></p>
+                    </div>
+                    <div class="pdf-group">
+                        <div>Basic</div>
+                        <div>{{ this.formatAmount(salaryForm.get('basicSalary')?.value) }}</div>
+                    </div>
+                    <div class="pdf-group">
+                        <div>HRA</div>
+                        <div>{{ this.formatAmount(salaryForm.get('hra')?.value) }}</div>
+                    </div>
+                    <div class="pdf-group">
+                        <div>Allowance</div>
+                        <div>{{ this.formatAmount(salaryForm.get('allowances')?.value) }}</div>
+                    </div>
+                    <div class="pdf-group">
+                        <div><b>Total: INR</b></div>
+                        <div><b>{{ this.formatAmount(calculateEarningsTotal()) }}</b></div>
+                    </div>
+                </div>
+                <div class="deduction-container">
+                    <div class="pdf-group">
+                        <p><b>DEDUCTIONS</b></p>
+                        <p><b>AMOUNT</b></p>
+                    </div>
+                    <div class="pdf-group">
+                        <div>PF/ESI</div>
+                        <div>{{ this.formatAmount(salaryForm.get('pfAmount')?.value) }}</div>
+                    </div>
+                    <div class="pdf-group">
+                        <div>TAX</div>
+                        <div>{{ this.formatAmount(salaryForm.get('tax')?.value) }}</div>
+                    </div>
+                    <div class="pdf-group">
+                        <div>Others</div>
+                        <div>{{ this.formatAmount(salaryForm.get('others')?.value) }}</div>
+                    </div>
+                    <div class="pdf-group">
+                        <div><b>Total: INR</b></div>
+                        <div><b>{{ this.formatAmount(calculateDeductionsTotal()) }}</b></div>
+                    </div>
+                </div>
+                </div>
+            <div class="net-pay"><b>Total Net Payable: INR {{ this.formatAmount(calculateNetPayTotal()) }}</b>
+                <span class="words">&nbsp;(Rupees {{ amountToWords(calculateNetPayTotal()) }} Only)</span></div>
             </div>
-            <div class="pdf-group">
-                <div>Days Present</div>
-                <div>{{ salaryForm.get('daysPresent')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>Designation</div>
-                <div>{{ salaryForm.get('designation')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>PF No</div>
-                <div>{{ salaryForm.get('pfNo')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>Account Number</div>
-                <div>{{ salaryForm.get('accountNo')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>UAN No</div>
-                <div>{{ salaryForm.get('uanNo')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>Aadhar No</div>
-                <div>{{ salaryForm.get('aadharNo')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>PAN No</div>
-                <div>{{ salaryForm.get('panNo')?.value }}</div>
-            </div>
-            <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid orange; margin: 1rem 0;">
-            <div class="pdf-group">
-                <p><b>EARNINGS</b></p>
-                <p><b>AMOUNT</b></p>
-            </div>
-            <div class="pdf-group">
-                <p><b>DEDUCTIONS</b></p>
-                <p><b>AMOUNT</b></p>
-            </div>
-            <div class="pdf-group">
-                <div>Basic</div>
-                <div>{{ salaryForm.get('basicSalary')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>PF</div>
-                <div>{{ salaryForm.get('pfAmount')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>HRA</div>
-                <div>{{ salaryForm.get('hra')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>TAX</div>
-                <div>{{ salaryForm.get('tax')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>Allowance</div>
-                <div>{{ salaryForm.get('allowances')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div>Others</div>
-                <div>{{ salaryForm.get('others')?.value }}</div>
-            </div>
-            <div class="pdf-group">
-                <div><b>Total</b></div>
-                <div>{{ calculateEarningsTotal() }}</div>
-            </div>
-            <div class="pdf-group">
-                <div><b>Total</b></div>
-                <div>{{ calculateDeductionsTotal() }}</div>
-            </div>
-            <div class="pdf-group">
-                <div><b>Net Pay</b></div>
-                <div>{{ calculateNetPayTotal() }}</div>
-            </div>       
-        </div>
-        <div class="net-pay"><b>Total Net Payable: {{ calculateNetPayTotal() }} ({{ amountToWords(calculateNetPayTotal()) }})</b></div>
-        <hr style="grid-column: 1 / -1; border: none; border-top: 1px solid orange; margin: 1rem 0;">
-        <div class="note">This is a system generated salary slip. Hence signature is not required.</div>
+            <div class="note">This is a system generated salary slip and does not require signature.</div>
         </div>
     </div>
 </main>
