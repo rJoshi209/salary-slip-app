@@ -3,24 +3,24 @@ import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } 
 import { RouterOutlet } from '@angular/router';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getAnalytics } from 'firebase/analytics';
+// import { initializeApp } from 'firebase/app';
+// import { getFirestore } from 'firebase/firestore';
+// import { getAnalytics } from 'firebase/analytics';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDrkphJeVH4nJoA03WJMgTxPpVJVwy365Y",
-    authDomain: "salary-slip-app-ecdb4.firebaseapp.com",
-    projectId: "salary-slip-app-ecdb4",
+// const firebaseConfig = {
+//     apiKey: "AIzaSyDrkphJeVH4nJoA03WJMgTxPpVJVwy365Y",
+//     authDomain: "salary-slip-app-ecdb4.firebaseapp.com",
+//     projectId: "salary-slip-app-ecdb4",
     
-    storageBucket: "salary-slip-app-ecdb4.firebasestorage.app",
-    messagingSenderId: "133204434143",
-    appId: "1:133204434143:web:08b3870e96450106249d6a",
-    measurementId: "G-98S8EWDR41"
-};
+//     storageBucket: "salary-slip-app-ecdb4.firebasestorage.app",
+//     messagingSenderId: "133204434143",
+//     appId: "1:133204434143:web:08b3870e96450106249d6a",
+//     measurementId: "G-98S8EWDR41"
+// };
 
-const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
-export const db = getFirestore(app);
+// const app = initializeApp(firebaseConfig);
+// export const analytics = getAnalytics(app);
+// export const db = getFirestore(app);
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, FormsModule, ReactiveFormsModule],
@@ -31,7 +31,7 @@ export class App {
     @ViewChild('contentToConvert', { static: false }) public contentToConvert: ElementRef | undefined;
     protected readonly title = signal('salary-slip-app');
     salaryForm: FormGroup;
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     years = Array.from({ length: 3000 - 2000 + 1 }, (_, i) => 2000 + i);
     showForm = true;
 
@@ -96,6 +96,32 @@ export class App {
         return this.calculateEarningsTotal() - this.calculateDeductionsTotal();
     }
 
+    formatAmount(amount: number | string): string {
+        if (amount === null || amount === undefined || amount === '') return '';
+        const cleaned = String(amount).replace(/,/g, '').trim();
+        if (cleaned === '') return '';
+        const numeric = Number(cleaned);
+        if (isNaN(numeric)) return '';
+
+        const sign = numeric < 0 ? '-' : '';
+        const absVal = Math.abs(numeric);
+
+        // Ensure two decimal places (rounded)
+        const fixed = absVal.toFixed(2); // e.g. "1234567.89"
+        const [intPartRaw, decPart = '00'] = fixed.split('.');
+
+        // Format integer part in Indian numbering system
+        let intPart = intPartRaw;
+        if (intPart.length > 3) {
+            const last3 = intPart.slice(-3);
+            const rest = intPart.slice(0, -3);
+            const restWithCommas = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ',');
+            intPart = restWithCommas + ',' + last3;
+        }
+
+        return `${sign}${intPart}.${decPart}`;
+    }
+
     amountToWords(amount: number): string {
         const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
         const teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
@@ -123,7 +149,8 @@ export class App {
             scaleIndex++;
         }
 
-        return parts.join(' ');
+        const resultStr = parts.join(' ');
+        return resultStr.replace(/\b[a-z]/g, (char) => char.toUpperCase());
     }
 
     private convertHundreds(num: number, ones: string[], teens: string[], tens: string[]): string {
